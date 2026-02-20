@@ -32,7 +32,7 @@ export default function App() {
 
   return (
     <div style={{ maxWidth: '600px', margin: 'auto', padding: '2rem' }}>
-      <h1>My Profile & Guestbook</h1>
+      <h1>(NIPAS) My Profile & Guestbook</h1>
       <form onSubmit={save}>
         <input placeholder="Name" value={form.name} onChange={e => setForm({...form, name: e.target.value})} required />
         <textarea placeholder="Message" value={form.message} onChange={e => setForm({...form, message: e.target.value})} required />
