@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 // Use environment variable for the backend URL
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/guestbook';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function App() {
   const [entries, setEntries] = useState([]);
