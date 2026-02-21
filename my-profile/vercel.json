@@ -1,7 +1,18 @@
 {
   "version": 2,
+  "builds": [
+    {
+      "src": "guestbook-app/backend/api/index.ts",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "my-profile/frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "dist" }
+    }
+  ],
   "rewrites": [
-    { "source": "/api/:path*", "destination": "backend/api/index.ts" },
-    { "source": "/(.*)", "destination": "frontend/dist/index.html" }
+    { "source": "/api/(.*)", "destination": "/my-profile/backend/api/index.ts" },
+    { "source": "/(.*)", "destination": "/my-profile/frontend/$1" }
   ]
 }
