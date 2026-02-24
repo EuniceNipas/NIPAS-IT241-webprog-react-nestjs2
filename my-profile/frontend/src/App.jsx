@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
 
-// Use environment variable for the backend URL
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+// Environment-aware API URL fallback:
+// - local dev Nest: http://localhost:3000/guestbook
+// - Vercel deployment (rewrite to serverless Nest): /api/guestbook
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.DEV
+    ? 'http://localhost:3000/guestbook'
+    : '/api/guestbook');
 
 export default function App() {
   const [entries, setEntries] = useState([]);
@@ -9,6 +15,10 @@ export default function App() {
 
   const load = async () => {
     const res = await fetch(API_URL);
+    if (!res.ok) {
+      console.error('Failed to load guestbook entries', await res.text());
+      return;
+    }
     setEntries(await res.json());
   };
 
@@ -16,17 +26,25 @@ export default function App() {
 
   const save = async (e) => {
     e.preventDefault();
-    await fetch(API_URL, {
+    const res = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form),
     });
+    if (!res.ok) {
+      console.error('Failed to save guestbook entry', await res.text());
+      return;
+    }
     setForm({ name: '', message: '' });
     load();
   };
 
   const remove = async (id) => {
-    await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+    const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+    if (!res.ok) {
+      console.error('Failed to delete guestbook entry', await res.text());
+      return;
+    }
     load();
   };
 
